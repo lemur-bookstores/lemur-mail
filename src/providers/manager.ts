@@ -18,8 +18,8 @@ export class Manager {
      * @throws {Error} Si el `name` del proveedor es desconocido o no está implementado.
      */
     public static getProvider(name: NotificationProviders, config: Configurations): Smtp<Configurations> | Gmail<Configurations> | MailGun<Configurations> {
-        switch (name.toLowerCase()) {
-            case 'smt': // Considera cambiar a 'smtp' para consistencia si es para SMTP genérico.
+        switch (name) {
+            case 'smtp': // Considera cambiar a 'smtp' para consistencia si es para SMTP genérico.
                 return new Smtp(config);
             case 'gmail':
                 return new Gmail(config);
