@@ -1,9 +1,7 @@
 import fs from 'fs/promises';
 import mustache from 'mustache';
 import path from 'path';
-import { MailBuilder } from "./build";
-import { MailOptions, Response } from './build/useCases';
-
+import { MailBuilder, MailOptions, Response } from "./build";
 import { Providers } from "./providers";
 import { TemplateConfigManager } from './configs/templateConfigManager ';
 
