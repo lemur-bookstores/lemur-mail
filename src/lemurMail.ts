@@ -51,9 +51,7 @@ export class LemurMail<Config extends LemurMailConfig['provider']['config']> {
             // Si la ruta no se proporciona, intenta auto-detectarla.
             // Nota: autoDetectPath es asíncrono, pero se maneja aquí de forma síncrona,
             // lo que podría llevar a un estado no completamente inicializado si no se llama a `init()`.
-            TemplateConfigManager.autoDetectPath();
-            this.templatesBasePath = TemplateConfigManager.getPath();
-            this.isInitialized = true; // Se marca como inicializado, pero puede que la ruta no esté lista aún.
+
             console.warn('Ruta de plantillas no proporcionada. Llama a `await lemurMailInstance.init()` para auto-detectar de forma segura.');
             // TODO: Refactorizar: autoDetectPath es asíncrono. Esta sección podría requerir un `await`
             // o que la inicialización completa sea un método `init()` asíncrono obligatorio.
