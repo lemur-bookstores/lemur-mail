@@ -1,0 +1,44 @@
+{
+  "ts-node": {
+    "files": true
+  },
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "es2018" /* Target a more modern ES version for Node.js (e.g., Node.js 10+ supports ES2018). */,
+    "lib": ["es2018"] /* Explicitly include required library declarations. */,
+
+    /* Modules */
+    "module": "commonjs" /* Node.js uses CommonJS for modules by default. */,
+    "rootDir": "./src" /* Specifies the root directory of your source files. */,
+    "moduleResolution": "node" /* How TypeScript looks up modules (Node.js style). */,
+    "esModuleInterop": true /* Allows easier importing of CommonJS modules into ES Modules syntax. Essential for many Node.js packages. */,
+    "forceConsistentCasingInFileNames": true /* Ensures consistent casing for imports to prevent issues on case-sensitive file systems. */,
+
+    /* Emit */
+    "declaration": true /* Crucial: Generates .d.ts files for your library, essential for TypeScript users. */,
+    "declarationMap": true /* Optional: Generates sourcemaps for .d.ts files, useful for debugging types. */,
+    "sourceMap": true /* Generates sourcemaps for compiled JavaScript files, useful for debugging your compiled code. */,
+    "outDir": "./dist" /* Specifies the output folder for all compiled JavaScript and declaration files. */,
+    "removeComments": true /* Removes comments from the compiled JavaScript output. */,
+
+    /* Type Checking */
+    "strict": true /* Enables all strict type-checking options for robust code. Highly recommended for libraries. */,
+    // You can uncomment specific strict checks if you want to be more granular,
+    // but `strict: true` covers most of them.
+    // "noImplicitAny": true,
+    // "strictNullChecks": true,
+    // "noUnusedLocals": true,           /* Report errors on unused local variables. */
+    // "noUnusedParameters": true,       /* Report errors on unused parameters. */
+
+    /* Completeness */
+    "skipLibCheck": true /* Skips type checking of all declaration files (.d.ts). Good for performance, but can hide issues in dependencies. */
+  },
+  "include": [
+    "src/**/*" /* Tells TypeScript to include all files in the 'src' directory. */
+  ],
+  "exclude": [
+    "node_modules" /* Excludes node_modules from compilation. */,
+    "dist" /* Excludes the output directory from compilation. */,
+    "**/*.test.ts" /* Excludes test files from the main compilation. */
+  ]
+}
