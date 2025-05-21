@@ -1,24 +1,14 @@
 import nodemailer, { Transporter } from "nodemailer";
 import { MailBuilder } from "../build";
-import { EmailOptions, MailUseCases, Response } from "../build/useCases";
+import { MailOptions, MailUseCases, Response } from "../build/useCases";
 
-export interface Config {
-    host: string;
-    port: number;
-    secure: boolean;
-    auth: {
-        user: string;
-        pass: string;
-    };
-}
-
-export class Smtp extends MailBuilder<Transporter, Config, EmailOptions> implements MailUseCases<EmailOptions> {
+export class Smtp<Config> extends MailBuilder<Transporter, Config, MailOptions> implements MailUseCases<MailOptions> {
 
     constructor(smtpConfig: Config) {
         super(smtpConfig, nodemailer.createTransport);
     }
 
-    async sendMail<T extends Response>(options: EmailOptions, templateMain: string): Promise<T> {
+    async sendMail<T extends Response>(options: MailOptions, templateMain: string): Promise<T> {
         try {
             return await this.transporter.sendMail({
                 ...options,

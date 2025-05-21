@@ -1,6 +1,7 @@
+import { Smtp } from "./smtp";
 import { Gmail } from "./gmail";
 import { MailGun } from "./mailGun";
-import { Smtp } from "./smtp";
+import { Manager } from "./manager";
 
-export { Smtp, MailGun, Gmail };
-export const Providers = { Smtp, MailGun, Gmail };
+export { Smtp, MailGun, Gmail, Manager };
+export const Providers = { Smtp, MailGun, Gmail, Manager };

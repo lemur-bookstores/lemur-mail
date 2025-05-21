@@ -1,23 +1,15 @@
 import nodemailer, { Transporter } from "nodemailer";
 import mailgun from 'nodemailer-mailgun-transport';
 import { MailBuilder } from "../build";
-import { EmailOptions, MailUseCases, Response } from "../build/useCases";
+import { MailOptions, MailUseCases, Response } from "../build/useCases";
 
-export interface Config {
-    auth: {
-        api_key: string,
-        domain: string,
-        url: string | "https://api.mailgun.net/v3/"
-    }
-}
-
-export class MailGun extends MailBuilder<Transporter, Config, EmailOptions> implements MailUseCases<EmailOptions> {
+export class MailGun<Config> extends MailBuilder<Transporter, Config, MailOptions> implements MailUseCases<MailOptions> {
 
     constructor(smtpConfig: Config) {
         super(smtpConfig, (op: any) => nodemailer.createTransport(mailgun(op)));
     }
 
-    async sendMail<T extends Response>(options: EmailOptions, templateMain: string): Promise<T> {
+    async sendMail<T extends Response>(options: MailOptions, templateMain: string): Promise<T> {
         try {
 
             return await new Promise((resolve, reject) => {

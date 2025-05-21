@@ -2,10 +2,8 @@ import fs from 'fs/promises';
 import mustache from 'mustache';
 import path from 'path';
 import { MailBuilder } from "./build";
-import { EmailOptions, Response } from './build/useCases';
-import { Config as SmtpConfig } from "./providers/smtp";
-import { Config as GmailConfig } from "./providers/gmail";
-import { Config as MailGunConfig } from "./providers/mailGun";
+import { MailOptions, Response } from './build/useCases';
+
 import { Providers } from "./providers";
 import { TemplateConfigManager } from './configs/templateConfigManager ';
 
@@ -22,11 +20,11 @@ interface Render {
 interface Send {
     /**
      * Send template
-     * @param option [EmailOptions]
+     * @param option [MailOptions]
      * @param data [T]
      * @returns {Promise<Response>}
      */
-    send: <T>(option: EmailOptions, data: T) => Promise<Response>
+    send: <T>(option: MailOptions, data: T) => Promise<Response>
 }
 
 /**
@@ -53,7 +51,7 @@ export class SendTrigger {
      * @param template
      * @returns Promise
      */
-    static gmail<Templates>(config: GmailConfig, template: Templates) {
+    static gmail<Templates>(config: LemurMailGmail, template: Templates) {
         console.log({ step: "Gmail" });
         return SendTrigger.build(new Providers.Gmail(config), template);
     }
@@ -64,7 +62,7 @@ export class SendTrigger {
      * @param template
      * @returns Promise
      */
-    static mailgun<Templates>(config: MailGunConfig, template: Templates) {
+    static mailgun<Templates>(config: LemurMailMailgun, template: Templates) {
         console.log({ step: "Mailgun" });
         return SendTrigger.build(new Providers.MailGun(config), template);
     }
@@ -75,7 +73,7 @@ export class SendTrigger {
      * @param template
      * @returns Promise
      */
-    static smtp<Templates>(config: SmtpConfig, template: Templates) {
+    static smtp<Templates>(config: LemurMailSmtp, template: Templates) {
         console.log({ step: "Smtp" });
         return SendTrigger.build(new Providers.Smtp(config), template);
     }
@@ -123,11 +121,11 @@ export class SendTrigger {
         return {
             /**
              * Send template
-             * @param option [EmailOptions]
+             * @param option [MailOptions]
              * @param data [T]
              * @returns {Promise<Response>}
              */
-            send: async function <T>(option: EmailOptions, data: T): Promise<Response> {
+            send: async function <T>(option: MailOptions, data: T): Promise<Response> {
                 const template = await render(data);
                 console.log({ step: "Send" });
                 return await provider.sendMail(option, template);
