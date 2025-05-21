@@ -216,7 +216,7 @@ async function sendExampleEmail() {
     const lemurMail = new LemurMail({
       path: path.resolve(__dirname, "..", "templates"), // Ruta manual
       provider: {
-        name: "nodemailer", // Usando SMTP genérico
+        name: "smtp", // Usando SMTP genérico
         config: {
           host: "smtp.ethereal.email",
           port: 587,

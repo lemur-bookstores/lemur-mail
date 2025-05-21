@@ -1,6 +1,6 @@
 {
   "name": "lemur-mail",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Lemur Mail: A flexible email provider interface for Node.js, abstracting multiple mail services with integrated template rendering.",
   "main": "dist/server/index.js",
   "browser": "dist/browser/index.js",
