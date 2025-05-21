@@ -1,0 +1,54 @@
+{
+  "name": "lemur-mail",
+  "version": "0.0.1",
+  "description": "Lemur Mail: A flexible email provider interface for Node.js, abstracting multiple mail services with integrated template rendering.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:cov": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "test:clear": "jest --clearCache"
+  },
+  "keywords": [
+    "email",
+    "mail",
+    "provider",
+    "interface",
+    "smtp",
+    "gmail",
+    "mailgun",
+    "sendgrid",
+    "abstraction",
+    "template",
+    "mustache",
+    "nodejs"
+  ],
+  "author": {
+    "name": "Elkin",
+    "email": "elkincp5@gmail.com",
+    "url": "https://www.linkedin.com/in/elkincp5"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "mustache": "4.2.0",
+    "nodemailer": "7.0.3",
+    "nodemailer-mailgun-transport": "2.1.5"
+  },
+  "devDependencies": {
+    "@types/jest": "29.5.14",
+    "@types/mustache": "4.2.6",
+    "@types/nodemailer": "6.4.17",
+    "@types/nodemailer-mailgun-transport": "1.4.6",
+    "cross-env": "7.0.3",
+    "jest": "29.7.0",
+    "ts-jest": "29.3.4",
+    "ts-node": "10.9.2",
+    "typescript": "5.8.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
