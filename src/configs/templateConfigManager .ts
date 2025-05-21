@@ -1,27 +1,31 @@
 import path from 'path';
 import { findUp } from '../helpers';
 
+
 export class TemplateConfigManager {
     private static _templatesBasePath: string | null = null;
     private static _isInitialized: boolean = false;
 
     /**
      * Configura la ruta base para las plantillas de correo.
-     * Debe llamarse una única vez al inicio de tu aplicación.
-     * @param config La ruta (string) o un objeto con rutas para dev/prod.
-     * Se espera que esta ruta sea la *carpeta que contiene* tus archivos .mustache.
+     * Esta función debe llamarse al inicio de tu aplicación para establecer dónde buscar las plantillas.
+     *
+     * @param {string | { develop: string; production: string }} config - La ruta (string)
+     * o un objeto con rutas específicas para entornos de desarrollo y producción.
+     * Se espera que esta ruta sea la *carpeta que contiene* tus archivos `.mustache`.
      */
     static setPath(config: string | { develop: string; production: string }): void {
         if (TemplateConfigManager._isInitialized) {
             console.warn("TemplateConfigManager ya ha sido inicializado. La nueva configuración podría sobrescribir la anterior.");
-            // O podrías lanzar un error si prefieres una inicialización única estricta.
+            // TODO: Considerar si lanzar un error aquí para forzar una inicialización única estricta.
         }
 
         if (typeof config === 'string') {
-            TemplateConfigManager._templatesBasePath = path.resolve(config); // Asegura que sea una ruta absoluta
+            // Asegura que la ruta sea absoluta para evitar problemas de resolución.
+            TemplateConfigManager._templatesBasePath = path.resolve(config);
         } else {
-            // Usa NODE_ENV para decidir la ruta
-            const env = process.env.NODE_ENV || 'development'; // Default a 'development'
+            // Decide la ruta basándose en la variable de entorno NODE_ENV.
+            const env = process.env.NODE_ENV || 'development';
             TemplateConfigManager._templatesBasePath = path.resolve(env === 'production' ? config.production : config.develop);
         }
 
@@ -34,10 +38,11 @@ export class TemplateConfigManager {
 
     /**
      * Intenta detectar automáticamente la ruta de las plantillas
-     * buscando un archivo 'lemur-mail.config.js' en la jerarquía de directorios.
-     * El archivo de configuración debe exportar un objeto con una propiedad 'path'.
+     * buscando un archivo `lemur-mail.config.js` en la jerarquía de directorios,
+     * subiendo desde el directorio de trabajo actual.
+     * El archivo de configuración encontrado debe exportar un objeto con una propiedad `path`.
      *
-     * Ejemplo de lemur-mail.config.js:
+     * Ejemplo de `lemur-mail.config.js`:
      * ```javascript
      * // lemur-mail.config.js
      * const path = require('path');
@@ -46,7 +51,8 @@ export class TemplateConfigManager {
      * }
      * ```
      *
-     * @throws {Error} Si no se encuentra el archivo de configuración o si la ruta no es válida.
+     * @returns {Promise<void>} Una promesa que se resuelve cuando la ruta ha sido detectada y configurada.
+     * @throws {Error} Si no se encuentra el archivo de configuración o si la ruta exportada no es válida.
      */
     static async autoDetectPath(): Promise<void> {
         if (TemplateConfigManager._isInitialized) {
@@ -54,16 +60,17 @@ export class TemplateConfigManager {
         }
 
         try {
-            // 1. Buscar el archivo de configuración hacia arriba
+            // Busca el archivo de configuración hacia arriba en el árbol de directorios.
             const configFilePath = await findUp('lemur-mail.config.js');
 
             if (!configFilePath) {
                 throw new Error("No se encontró el archivo 'lemur-mail.config.js' en la jerarquía de directorios. Por favor, asegúrate de que existe o configura la ruta manualmente.");
             }
 
-            // 2. Cargar el contenido del archivo de configuración
-            // Usamos 'require' porque los archivos de configuración son a menudo CommonJS
-            // Si tu proyecto es ES Modules, necesitarías 'import()' dinámico y manejarlo con cuidado.
+            // Carga el contenido del archivo de configuración.
+            // Se usa 'require' asumiendo que los archivos de configuración son CommonJS.
+            // TODO: Si la librería planea ser puramente ES Modules, evaluar si es necesario
+            // manejar 'import()' dinámico aquí y sus implicaciones.
             const configModule = require(configFilePath);
             const templatesPathFromConfig = configModule.path;
 
@@ -71,24 +78,23 @@ export class TemplateConfigManager {
                 throw new Error(`El archivo 'lemur-mail.config.js' en '${configFilePath}' no exporta una propiedad 'path' válida de tipo string.`);
             }
 
-            // 3. Almacenar la ruta resuelta
-            // El 'path.resolve' ya debería haberse hecho dentro del archivo de configuración,
-            // pero lo volvemos a asegurar por si acaso.
+            // Almacena la ruta resuelta.
             TemplateConfigManager._templatesBasePath = path.resolve(templatesPathFromConfig);
             TemplateConfigManager._isInitialized = true;
 
-            // console.log(`Ruta de plantillas detectada automáticamente: ${TemplateConfigManager._templatesBasePath}`);
-
         } catch (error: any) {
-            TemplateConfigManager._isInitialized = false; // Asegurarse de que no quede en un estado parcial
+            // Asegura que el estado de inicialización sea falso si ocurre un error.
+            TemplateConfigManager._isInitialized = false;
             throw new Error(`Error al detectar automáticamente la ruta de las plantillas: ${error.message || error}. Considera configurar la ruta manualmente.`);
         }
     }
 
     /**
-     * Obtiene la ruta base de las plantillas configurada.
-     * @returns La ruta base de las plantillas.
-     * @throws Error si TemplateConfigManager no ha sido inicializado.
+     * Obtiene la ruta base de las plantillas que ha sido configurada.
+     *
+     * @returns {string} La ruta base absoluta de las plantillas.
+     * @throws {Error} Si `TemplateConfigManager` no ha sido inicializado previamente
+     * (es decir, si no se ha llamado a `setPath()` o `autoDetectPath()`).
      */
     static getPath(): string {
         if (!TemplateConfigManager._isInitialized || !TemplateConfigManager._templatesBasePath) {
