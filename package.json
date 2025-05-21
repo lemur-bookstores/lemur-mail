@@ -1,11 +1,14 @@
 {
   "name": "lemur-mail",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Lemur Mail: A flexible email provider interface for Node.js, abstracting multiple mail services with integrated template rendering.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/server/index.js",
+  "browser": "dist/browser/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build-browser & npm run build-server",
+    "build-cdn": "npx tsc --outDir dist/cdn --module ESNext --target ES5",
+    "build-browser": "npx tsc --outDir dist/browser --module ES6",
+    "build-server": "npx tsc --outDir dist/server",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "test:cov": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",

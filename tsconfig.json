@@ -9,7 +9,7 @@
 
     /* Modules */
     "module": "commonjs" /* Node.js uses CommonJS for modules by default. */,
-    "rootDir": "./src" /* Specifies the root directory of your source files. */,
+    // "rootDir": "./src" /* Specifies the root directory of your source files. */,
     "moduleResolution": "node" /* How TypeScript looks up modules (Node.js style). */,
     "esModuleInterop": true /* Allows easier importing of CommonJS modules into ES Modules syntax. Essential for many Node.js packages. */,
     "forceConsistentCasingInFileNames": true /* Ensures consistent casing for imports to prevent issues on case-sensitive file systems. */,
@@ -34,7 +34,10 @@
     "skipLibCheck": true /* Skips type checking of all declaration files (.d.ts). Good for performance, but can hide issues in dependencies. */
   },
   "include": [
-    "src/**/*" /* Tells TypeScript to include all files in the 'src' directory. */
+    "src/**/*" /* Tells TypeScript to include all files in the 'src' directory. */,
+    "./index.ts",
+    "src/dts/*.d.ts",
+    "example.ts"
   ],
   "exclude": [
     "node_modules" /* Excludes node_modules from compilation. */,

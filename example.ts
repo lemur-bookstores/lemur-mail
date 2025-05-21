@@ -1,5 +1,5 @@
 // app.ts (or wherever you send emails)
-import { LemurMail } from './lemurMail';
+import { LemurMail } from './src/lemurMail';
 
 async function runEmailSender() {
     try {
